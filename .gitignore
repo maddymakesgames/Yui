@@ -1,0 +1,9 @@
+yarn-debug.log*
+yarn-error.log*
+config.json
+config.js
+data/
+test.js
+discord-music-bot
+node_modules
+points.json

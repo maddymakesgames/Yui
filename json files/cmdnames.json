@@ -1,0 +1,29 @@
+
+  {
+    "commands":{
+        "General":[
+          "help",
+          "ping",
+          "level",
+          "mhelp"
+        ],
+       "Fun":[
+         "random",
+         "color",
+         "moo",
+         "ncolor"
+       ]
+    },
+    "helps":{
+    "help":[
+      "Help",
+      "/help or /help <command>",
+      "Shows the command list or the help menu for a specific command"
+    ],
+    "color":[
+      "Color",
+      "/color <color>",
+      "Changes your name color. Right now the only working colors are red, blue, purple, green.\nI'm planing on adding a way to have you input a hexadecimal code and make it your color. Won't happen for a while though."
+    ]
+    }
+    }
