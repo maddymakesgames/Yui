@@ -29,7 +29,7 @@ exports.conf = {
 };
 
 exports.help = {
-  name: "Random",
+  name: "random",
   category: "Fun",
   description: "Give you a random outdated meme.",
   usage: "random"
