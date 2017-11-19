@@ -28,7 +28,7 @@ exports.conf = {
 };
 
 exports.help = {
-  name: "Color",
+  name: "color",
   category: "Fun",
   description: "Change your name color.",
   usage: "color <hexidecimal value of a color>"
