@@ -8,6 +8,7 @@
     "enmap": "^0.4.2",
     "enmap-level": "^1.0.0",
     "jimp": "^0.2.28",
+    "random-js": "^1.0.8",
     "snekfetch": "^3.5.8"
   },
   "engines": {

@@ -167,7 +167,8 @@ module.exports = (client) => {
   // <Array>.random() returns a single random element from an array
   // [1, 2, 3, 4, 5].random() can return 1, 2, 3, 4 or 5.
   Array.prototype.random = function() {
-    return this[Math.floor(Math.random() * this.length)]
+    var Random = require("random-js")();
+    return this[Random.integer(0, this.length)];
   };
 
   // `await client.wait(1000);` to "pause" for 1 second.
