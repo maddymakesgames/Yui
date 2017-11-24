@@ -1,11 +1,16 @@
 exports.run = async (client, message, args) => {
-var credits = client.credits.get(message.author.send);
+var credits = client.credits.get(message.author.id);
 var points = client.points.get(message.author.id);
-
+if(args.length >= 3){
+    var amount = args[2];
+}else{
+    var amount = 0;
+}
 if(args[0] == "set"){
     if(args[1] == "credits"){
-        credits.credits = args[2] || 0;
-        client.credits.set(message.author.id, credits.credits);
+        credits = {credits:parseInt(amount)};
+        console.log(client.credits);
+        client.credits.set(message.author.id, credits);
         message.channel.send(`You now have ${args[0]} credits. Want proof? Here: ${credits.credits}`);
     }
     else if(args[1] == "points"){
