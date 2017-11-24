@@ -1,18 +1,27 @@
+
 exports.run = async (client, message, args) => {
-  
-  const money = client.credits.get(message.author.id);
-  const amount = args[0];
-  if(args[0].length < 0){
+  const author = message.author.id;
+  const credits = client.credits.get(author);
+  var amount = args[0];
+  if(args.length > 0){
     amount = args[0]
   }
   else{
     amount = 1;
   }
-  if(!(money.credits >= amount)) message.chanel.send(`You don't have ${amount} credits`); return;
-  var jackpot = amount * 5;
-  var firstPrize = amount * 2;
-  var secondPrize = amount * 1.5;
-  var lastPrize = amount * 1.1;
+  //console.log("amount = "+amount);
+ // console.log(credits.credits < amount);
+  if(credits.credits < amount){
+     message.channel.send(`You don't have ${amount} credits`); return;
+    }
+     else{
+  var jackpot = amount * 25;
+  var triple7s = amount * 15;
+  var double7s = amount * 9;
+  var single7 = amount * 3;
+  var secondPrize = amount * 4;
+  var lastPrize = amount * 3;
+  //console.log(`jackpot = ${jackpot} \n firstprize = ${firstPrize} \n second Prize = ${secondPrize} \n last Prize = ${lastPrize}`);
 
   const slotsObj = {
     "slots":{
@@ -25,43 +34,75 @@ exports.run = async (client, message, args) => {
       7:":gem:"
     }
   }
+  //console.log(JSON.stringify(slotsObj));
+ // console.log(slotsObj["slots"])
   const msg = await message.channel.send(`**Slot [:slot_machine:] Machine**\n`);
+ // console.log(`message sent = ${msg}`);
+  var n = new Array();
+  var l = new Array();
+  var weight = [0, 1, 1, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7];
+  var output = "";
+  const slotsProps = slotsObj["slots"];
   for(var i = 0; i < 5; i++){
     for(var e = 0; e < 9; e++){
-      n[e] = Math.floor(Math.random() * 7);
-      for(var prop in slotsObj["slots"]){
-        if(n[e] == prop) e[e] = prop;
+      n[e] = await weight.random();
+      for(var prop in slotsProps){
+        if(n[e] == prop) l[e] = slotsProps[prop];
       }
-      if(e % 3 == 0)e[e] += '\n';
-      output += e[e];
-    }
-    msg.edit(`**Slot [:slot_machine:] Machine**\n` + output);
+      if((e+1)%3 == 0){
+       // console.log((e+1)%3 + " " + l[e] + " " + e);
+        output += l[e];
+        output += `\n`;
+      }
+      else{
+        output += l[e];
+        output += `|`;
+      }
+      
+    } 
+    await msg.edit(`**Slot [:slot_machine:] Machine**\n ${output}`);
+    output = "";
+   // console.log(`message editted`)
   }
-
-  if(randint17f == randint17s && randint17f == randint17t && randint17s == randint17t && randint17f != 3){
+  if(l[3] == l[4] && l[3] == l[5]){
     const msg = await message.channel.send("You Win!!!")
 
-    if(randint17f == 7){
+    if(n[3] == 7){
       credits.credits += jackpot;
-      message.channel.send(`<first line here> \n :gem::gem::gem: \n <thirdlinehere>`)
-      msg.edit(`You Win ${jackpot} points!!`);
+      msg.edit(`**${message.author.username}**, You Win ${jackpot} credits!!`);
     }
-    else if(randint17f == 4){
+    else if(n[3] == 6){
+      credits.credits += triple7s;
+      msg.edit(`**${message.author.username}**, You win ${triple7s} credits!!`)
+    }
+    else if(n[3] == 4){
      credits.credits += firstPrize;
-      msg.edit(`You Win ${firstPrize} points!!`);
+      msg.edit(`**${message.author.username}**, You Win ${firstPrize} credits!!`);
     }
-    else if(randint17f != 0) {
+    else if(n[3] != 0) {
       credits.credits += secondPrize;
-      msg.edit(`You Win ${secondPrize} points!!`);
+      msg.edit(`**${message.author.username}**, You Win ${secondPrize} credits!!`);
     }
-    else{
-      message.channel.send(`You got all Xs! You lose. `);
-    }
+    client.credits.set(author, credits);
+  }
+  else if(l[3] == l[4] && n[4] == 6 || l[4] == l[5] && n[4] == 6){
+    const msg = await message.channel.send("You Win!!!");
+      credits.credits += double7s;
+      msg.edit(`**${message.author.username}**, You Win ${double7s} credits!!`);
+      client.credits.set(author, credits);
+  }
+  else if(n[3] == 6 || n[4] == 6 || n[5] == 6){
+    credits.credits +- single7;
+    message.channel.send(`**${message.author.username}**, You Win ${single7} credits!!`);
+    client.credits.set(author, credits);
   }
   else{
-    message.channel.send("You lost :(")
-     points[message.author.id] -= 1;
+    message.channel.send(`**${message.author.username}** You lost :(`);
+    //   points[message.author.id] -= 1;
   }
+  console.log(`3: ${l[3]}, 4: ${l[4]}, 5: ${l[5]}`);
+  console.log(`3: ${n[3]}, 4: ${n[4]}, 5: ${n[5]}`)
+}
 }
 
 
