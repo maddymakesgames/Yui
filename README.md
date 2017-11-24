@@ -1,3 +1,4 @@
+
 Welcome to the Yui discord.js bot!
 ===================================
 
@@ -31,3 +32,4 @@ Step 5:
 If you are using a linux server (and why wouldn't you)
 run `sudo apt get forever` to install forever.
 then run `forever start bot.js` to run bot.js forever.
+=======
