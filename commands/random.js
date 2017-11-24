@@ -1,5 +1,5 @@
 exports.run = async (client, message, args) => {
-
+  //message.channel.send("test");
   var randomResponce = {
   	"responce": {
   			1:"Beam me up scotty",
@@ -10,10 +10,14 @@ exports.run = async (client, message, args) => {
   			6:"Do a barrel roll!",
   			7:"( ͡° ͜ʖ ͡°)"
   	}
-  }
-
-  rand13 = Math.floor(Math.random() * randomResponce.length)+1
+  };
   var randobj = randomResponce["responce"];
+  var count = 0;
+  for(var prop in randobj){
+    count++;
+  }
+  rand13 = Math.floor(Math.random() * count)+1
+//  message.channel.send(count);
   for(var prop in randobj) {
       if(prop == rand13){
     message.channel.send(randobj[prop]);
@@ -29,7 +33,7 @@ exports.conf = {
 };
 
 exports.help = {
-  name: "Random",
+  name: "random",
   category: "Fun",
   description: "Give you a random outdated meme.",
   usage: "random"

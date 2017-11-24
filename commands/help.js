@@ -20,25 +20,52 @@ exports.run = (client, message, args, level) => {
     const commandNames = myCommands.keyArray();
     const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 
+    var i = 0;
+    var e = 0;
+    var catCount = new Array();
     let currentCategory = "";
-    let output = `= Command List =\n\n[Use ${settings.prefix}help <commandname> for details]\n`;
+    let output = `\`\`\`js\nCommand List\`\`\``;
     const sorted = myCommands.array().sort((p, c) => p.help.category > c.help.category ? 1 :  p.help.name > c.help.name && p.help.category === c.help.category ? 1 : -1 );
+    
+  
+    sorted.forEach( c => {
+      const cat = c.help.category.toProperCase();
+      if(currentCategory !== cat){
+        currentCategory = cat;
+        i++;
+        catCount[i] = 0;
+      }
+      catCount[i] ++;
+    })
+    
+    currentCategory = "";
+    i = 0;
     sorted.forEach( c => {
       const cat = c.help.category.toProperCase();
       if (currentCategory !== cat) {
-        output += `\n== ${cat} ==\n`;
+        output += `**${cat}**:\n`;
         currentCategory = cat;
+        e = 1;
+        i++;
       }
-      output += `${settings.prefix}${c.help.name}${" ".repeat(longest - c.help.name.length)} :: ${c.help.description}\n`;
+      if(e != catCount[i]){
+      output += `\`${settings.prefix[0]}${c.help.name}\`, `;
+      }
+      else{
+        output += `\`${settings.prefix[0]}${c.help.name}\`\n`
+      }
+      
+      e++
     });
-    message.channel.send(output, {code:"asciidoc"});
+    output += `\`\`\`[Use ${settings.prefix[0]}help <commandname> for details]\`\`\``
+    message.channel.send(output);
   } else {
     // Show individual command's help.
     let command = args[0];
     if (client.commands.has(command)) {
       command = client.commands.get(command);
       if (level < client.levelCache[command.conf.permLevel]) return;
-      message.channel.send(`= ${command.help.name} = \n${command.help.description}\nusage::${command.help.usage}`, {code:"asciidoc"});
+      message.channel.send(`${command.help.name} \nDescription: ${command.help.description}\nUsage: ${command.help.usage}`, {code:"asciidoc"});
     }
   }
 };

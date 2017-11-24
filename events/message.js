@@ -3,11 +3,13 @@
 // Note that due to the binding of client to every event, every event
 // goes `client, other, args` when this function is run.
 
-module.exports = (client, message) => {
+module.exports = async(client, message) => {
   // It's good practice to ignore other bots. This also makes your bot ignore itself
   // and not get into a spam loop (we call that "botception").
   if (message.author.bot) return;
 
+  client.pointsMonitor(client, message);
+  client.serverPointsMonitor(client, message);
   // Grab the settings for this server from the PersistentCollection
   // If there is no guild, get default conf (DMs)
   const settings = message.guild
@@ -18,15 +20,18 @@ module.exports = (client, message) => {
   // to the message object, so `message.settings` is accessible.
   message.settings = settings;
 
+  let prefix = false;
   // Also good practice to ignore any message that does not start with our prefix,
   // which is set in the configuration file.
-  if (message.content.indexOf(settings.prefix) !== 0) return;
-
+  for(const prop of settings.prefix){
+  if (message.content.indexOf(prop) == 0) prefix = prop;
+}
+if(!prefix) return;
   // Here we separate our "command" name, and our "arguments" for the command.
   // e.g. if we have the message "+say Is this the real life?" , we'll get the following:
   // command = say
   // args = ["Is", "this", "the", "real", "life?"]
-  const args = message.content.slice(settings.prefix.length).trim().split(/ +/g);
+  const args = message.content.slice(prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
 
   // Get the user or member's permission level from the elevation
@@ -46,14 +51,18 @@ module.exports = (client, message) => {
 
   if (level < client.levelCache[cmd.conf.permLevel]) {
     if (settings.systemNotice === "true") {
-      return message.channel.send(`You do not have permission to use this command.
-  Your permission level is ${level} (${client.config.permLevels.find(l => l.level === level).name})
-  This command requires level ${client.levelCache[cmd.conf.permLevel]} (${cmd.conf.permLevel})`);
+      return message.channel.send(`You do not have permission to use this command.`);
     } else {
       return;
     }
   }
 
+  if(settings.debug == true){
+    const msg = await message.channel.send(cmd);
+    for(var arg in args){
+      msg.edit(msg +" " + arg);
+    }
+  }
   // To simplify message arguments, the author's level is now put on level (not member so it is supported in DMs)
   // The "level" command module argument will be deprecated in the future.
   message.author.permLevel = level;
