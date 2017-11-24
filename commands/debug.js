@@ -2,7 +2,7 @@ exports.run = async (client, message, args) => {
 
   const config = client.settings.get(message.guild.id);
 
-      if(client.config.debug == true){
+      if(config.debug == true){
          config.debug = false;
         message.channel.send("debug mode turned off")
       }
@@ -10,7 +10,7 @@ exports.run = async (client, message, args) => {
         config.debug = true;
         message.channel.send("debug mode turned on")
       }
-
+  client.settings.set(message.guild.id, config)
 
 }
 

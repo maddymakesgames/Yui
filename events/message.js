@@ -58,10 +58,12 @@ if(!prefix) return;
   }
 
   if(settings.debug == true){
-    const msg = await message.channel.send(cmd);
-    for(var arg in args){
-      msg.edit(msg +" " + arg);
+    const msg = await message.channel.send(JSON.stringify(cmd));
+    if(args.length > 0 ){
+    for(var i = 0; i < args.length; i++){
+      msg.edit(msg +" " + args[i]);
     }
+  }
   }
   // To simplify message arguments, the author's level is now put on level (not member so it is supported in DMs)
   // The "level" command module argument will be deprecated in the future.
