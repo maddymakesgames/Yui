@@ -4,7 +4,7 @@ module.exports = (client) => {
   PERMISSION LEVEL FUNCTION
   This is a very basic permission system for commands which uses "levels"
   "spaces" are intentionally left black so you can add them if you want.
-  NEVER GIVE ANYONE BUT OWNER THE LEVEL 10! By default this can run any
+  NEVER GIVE ANYONE BUT OWNER THE LEVEL 11! By default this can run any
   command including the VERY DANGEROUS `eval` and `exec` commands!
   */
   client.permlevel = message => {
@@ -54,6 +54,49 @@ module.exports = (client) => {
   };
 
 
+  client.pointsMonitor = (client, message) => {
+    const guild = message.guild.id;
+    const author = message.author.id;
+    const settings = client.settings.get(guild);
+   let prefix = false;
+    for(const prop of settings.prefix){
+      if (message.content.indexOf(prop) == 0) prefix = prop;
+    }
+    if(message.content.startsWith(prefix)) return;
+    const score = client.points.get(author) || { points: 0, level: 1 };
+    const credits = client.credits.get(author) || {credits: 0};
+    score.points++;
+    const curLevel = Math.floor(0.1 * Math.sqrt(score.points)) + 1;
+    if (score.level < curLevel) {
+      message.reply(`You've leveled up to level **${curLevel}**! Ain't that dandy?`);
+      score.level = curLevel;
+      credits.credits++;
+      console.log(credits);
+    }
+    client.points.set(author, score);
+    client.credits.set(author, credits);
+  };
+  
+
+  client.serverPointsMonitor = (client, message) => {
+    const guild = message.guild.id;
+    const author = message.author.id;
+    const settings = client.settings.get(guild);
+    let prefix = false;
+    for(const prop of settings.prefix){
+      if (message.content.indexOf(prop) == 0) prefix = prop;
+    }
+    if(message.content.startsWith(prefix)) return;
+    var score = client.serverPoints.get(guild) || {[author]:{ points: 0}};
+    if(score[author] === undefined){
+      score[author] = {points:1}
+    }else{
+      score[author].points++;
+    }
+    client.serverPoints.set(guild, score);
+    console.log(score);
+  }
+
   /*
   MESSAGE CLEAN FUNCTION
   "Clean" removes @everyone pings, as well as tokens, and makes code blocks
@@ -78,7 +121,7 @@ module.exports = (client) => {
   client.loadCommand = (commandName) => {
     try {
       const props = require(`../commands/${commandName}`);
-      client.log("log", `Loading Command: ${props.help.name}. 👌`);
+      client.log("log", `Loading Command: ${props.help.name}`);
       if (props.init) {
         props.init(client);
       }
@@ -99,7 +142,7 @@ module.exports = (client) => {
     } else if (client.aliases.has(commandName)) {
       command = client.commands.get(client.aliases.get(commandName));
     }
-    if (!command) return `The command \`${commandName}\` doesn"t seem to exist, nor is it an alias. Try again!`;
+    if (!command) return `The command \`${commandName}\` doesn't seem to exist, nor is it an alias. Try again!`;
 
     if (command.shutdown) {
       await command.shutdown(client);
@@ -124,7 +167,8 @@ module.exports = (client) => {
   // <Array>.random() returns a single random element from an array
   // [1, 2, 3, 4, 5].random() can return 1, 2, 3, 4 or 5.
   Array.prototype.random = function() {
-    return this[Math.floor(Math.random() * this.length)]
+    var Random = require("random-js")();
+    return this[Random.integer(0, this.length)];
   };
 
   // `await client.wait(1000);` to "pause" for 1 second.

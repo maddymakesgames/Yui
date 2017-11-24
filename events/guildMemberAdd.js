@@ -5,7 +5,7 @@ module.exports = (client, member) => {
   const settings = client.settings.get(member.guild.id);
 
   // If welcome is off, don't proceed (don't welcome the user)
-  if (settings.welcomeEnabled !== "true") return;
+  if (settings.welcomeEnabled !== true) return;
 
   // Replace the placeholders in the welcome message with actual data
   const welcomeMessage = settings.welcomeMessage.replace("{{user}}", member.user.tag);
@@ -14,10 +14,10 @@ module.exports = (client, member) => {
   // There's a place for more configs here.
   member.guild.channels.find("name", settings.welcomeChannel).send(welcomeMessage).catch(console.error);
 
-  if(settings.dmWelcomeeEnabled != "true") return;
+  if(settings.dmWelcomeEnabled != true) return;
 
-  const dmWelcomeMessage = settings.dmWelcomeMessage.replace("{{user}}", member.user.tag);
-  dmWelcomeEnabled = dmWelcomeEnabled.replace("{{server}}", member.guild.name);
+  const dmWelcomeMessage = settings.dmWelcomeMessage.replace("{{user}}", member.user);
+  dmWelcomeMessage = dmWelcomeMessage.replace("{{server}}", member.guild.name);
 
   member.send(dmWelcomeMessage);
 };

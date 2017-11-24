@@ -1,29 +1,28 @@
 exports.run = async (client, message, args) => {
-  const config = require('../json files/config.json')
-  const fs = require('fs')
 
+  const config = client.settings.get(message.guild.id);
 
       if(config.debug == true){
-        client.debug = false;
+         config.debug = false;
         message.channel.send("debug mode turned off")
       }
       else {
-        client.debug = true;
-                message.channel.send("debug mode turned on")
+        config.debug = true;
+        message.channel.send("debug mode turned on")
       }
-
+  client.settings.set(message.guild.id, config)
 
 }
 
 exports.conf = {
   enabled: true,
   guildOnly: true,
-  aliases: ["d"],
-  permLevel: "Bot Owner"
+  aliases: [],
+  permLevel: "Contributors"
 };
 
 exports.help = {
-  name: "Debug",
+  name: "debug",
   category: "Debug",
   description: "Turns on debug mode.",
   usage: "debug"

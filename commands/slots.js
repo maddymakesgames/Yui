@@ -1,39 +1,107 @@
+
 exports.run = async (client, message, args) => {
-//const config = require('../json files/config.json')
-const fs = require('fs')
+  const author = message.author.id;
+  const credits = client.credits.get(author);
+  var amount = args[0];
+  var money = credits.credits;
+  if(args.length > 0){
+    amount = args[0]
+  }
+  else{
+    amount = 1;
+  }
+  if(money < amount){
+     message.channel.send(`You don't have ${amount} credits`); return;
+    }
+     else{
+       money -= amount;
+  var jackpot = amount * 25;
+  var triple7s = amount * 15;
+  var double7s = amount * 9;
+  var single7 = amount * 2;
+  var secondPrize = amount * 4;
+  var lastPrize = amount * 2;
+  
+  const slotsObj = {
+    "slots":{
+      0:":flag_lv:",
+      1:":melon:",
+      2:":apple:",
+      3:":watermelon:",
+      4:":tangerine:",
+      5:":bell:",
+      6:":cherries:",
+      7:":gem:"
+    }
+  }
 
-//if(message.author.id == config.Owner){
-var randint17f = Math.floor(Math.random() * 7)
-var randint17s = Math.floor(Math.random() * 7)
-var randint17t = Math.floor(Math.random() * 7)
-let points = fs.readFileSync("./json files/points.json", "utf8");
-let userData = points[message.author.id];
+  const msg = await message.channel.send(`**Slot [:slot_machine:] Machine**\n`);
 
-//if(!points[message.author.id]){
-//console.log(message.author.id + "has no points")
-/// return;
-//}
-if(randint17f == randint17s && randint17f == randint17t && randint17s == randint17t && randint17f != 3){
-const msg = await message.channel.send("You Win!!!")
+  var n = new Array();
+  var l = new Array();
+  var weight = [0, 1, 1, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7];
+  var output = "";
+  const slotsProps = slotsObj["slots"];
+  for(var i = 0; i < 5; i++){
+    for(var e = 0; e < 9; e++){
+      n[e] = await weight.random();
+      for(var prop in slotsProps){
+        if(n[e] == prop) l[e] = slotsProps[prop];
+      }
+      if((e+1)%3 == 0){
 
-if(randint17f == 7){
-points[message.author.id] += 100;
-msg.edit("You Win 100 points!!")
+        output += l[e];
+        output += `\n`;
+      }
+      else{
+        output += l[e];
+        output += `|`;
+      }
+      
+    } 
+    await msg.edit(`**Slot [:slot_machine:] Machine**\n ${output}`);
+    output = "";
+
+  }
+  if(l[3] == l[4] && l[3] == l[5]){
+    const msg = await message.channel.send("You Win!!!")
+
+    if(n[3] == 7){
+      money += jackpot;
+      msg.edit(`**${message.author.username}**, You Win ${jackpot} credits!!`);
+    }
+    else if(n[3] == 6){
+      money += triple7s;
+      msg.edit(`**${message.author.username}**, You win ${triple7s} credits!!`)
+    }
+    else if(n[3] == 4){
+     money += firstPrize;
+      msg.edit(`**${message.author.username}**, You Win ${firstPrize} credits!!`);
+    }
+    else if(n[3] != 0) {
+      money += secondPrize;
+      msg.edit(`**${message.author.username}**, You Win ${secondPrize} credits!!`);
+    }
+  }
+  else if(l[3] == l[4] && n[4] == 6 || l[4] == l[5] && n[4] == 6){
+    const msg = await message.channel.send("You Win!!!");
+      money += double7s;
+      msg.edit(`**${message.author.username}**, You Win ${double7s} credits!!`);
+  }
+  else if(n[3] == 6 || n[4] == 6 || n[5] == 6){
+    money += single7;
+    message.channel.send(`**${message.author.username}**, You Win ${single7} credits!!`);
+
+  }
+  else{
+    message.channel.send(`**${message.author.username}** You lost :(`);
+
+  }
+
+  credits.credits = money;
+
+  client.credits.set(author, credits);
 }
-else if(randint17f == 4){
-points[message.author.id] += 50;
-msg.edit("You Win 50 points!!")
-}
-else {
-points[message.author.id] += 30;
-msg.edit("You Win 30 points!!")
-}
-}
-else{
-message.channel.send("You lost :(")
-points[message.author.id] -= 1;
-}
-fs.writeFile("./json files/points.json", JSON.stringify(points), (err) => { if(err) console.error(err)});
 }
 
 
@@ -45,8 +113,8 @@ exports.conf = {
 };
 
 exports.help = {
-  name: "Slots",
+  name: "slots",
   category: "Fun",
-  description: "Emulates a slot machine and gives you points based on if you win.",
-  usage: "slots"
+  description: "Use an amount of credits to give a chance to win a large amount of credits.",
+  usage: "slots <a amount of credits. Leave blank to use one>"
 };
