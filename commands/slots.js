@@ -3,6 +3,7 @@ exports.run = async (client, message, args) => {
   const author = message.author.id;
   const credits = client.credits.get(author);
   var amount = args[0];
+  var money = credits.credits;
   if(args.length > 0){
     amount = args[0]
   }
@@ -11,10 +12,12 @@ exports.run = async (client, message, args) => {
   }
   //console.log("amount = "+amount);
  // console.log(credits.credits < amount);
-  if(credits.credits < amount){
+  if(money < amount){
      message.channel.send(`You don't have ${amount} credits`); return;
     }
      else{
+       money -= amount;
+       console.log (`${money}   ${amount}`);
   var jackpot = amount * 25;
   var triple7s = amount * 15;
   var double7s = amount * 9;
@@ -26,6 +29,7 @@ exports.run = async (client, message, args) => {
   const slotsObj = {
     "slots":{
       0:":flag_lv:",
+      1:":melon:",
       2:":apple:",
       3:":watermelon:",
       4:":tangerine:",
@@ -68,40 +72,41 @@ exports.run = async (client, message, args) => {
     const msg = await message.channel.send("You Win!!!")
 
     if(n[3] == 7){
-      credits.credits += jackpot;
+      money += jackpot;
       msg.edit(`**${message.author.username}**, You Win ${jackpot} credits!!`);
     }
     else if(n[3] == 6){
-      credits.credits += triple7s;
+      money += triple7s;
       msg.edit(`**${message.author.username}**, You win ${triple7s} credits!!`)
     }
     else if(n[3] == 4){
-     credits.credits += firstPrize;
+     money += firstPrize;
       msg.edit(`**${message.author.username}**, You Win ${firstPrize} credits!!`);
     }
     else if(n[3] != 0) {
-      credits.credits += secondPrize;
+      money += secondPrize;
       msg.edit(`**${message.author.username}**, You Win ${secondPrize} credits!!`);
     }
-    client.credits.set(author, credits);
   }
   else if(l[3] == l[4] && n[4] == 6 || l[4] == l[5] && n[4] == 6){
     const msg = await message.channel.send("You Win!!!");
-      credits.credits += double7s;
+      money += double7s;
       msg.edit(`**${message.author.username}**, You Win ${double7s} credits!!`);
-      client.credits.set(author, credits);
   }
   else if(n[3] == 6 || n[4] == 6 || n[5] == 6){
-    credits.credits +- single7;
+    money += single7;
     message.channel.send(`**${message.author.username}**, You Win ${single7} credits!!`);
-    client.credits.set(author, credits);
+
   }
   else{
     message.channel.send(`**${message.author.username}** You lost :(`);
     //   points[message.author.id] -= 1;
   }
   console.log(`3: ${l[3]}, 4: ${l[4]}, 5: ${l[5]}`);
-  console.log(`3: ${n[3]}, 4: ${n[4]}, 5: ${n[5]}`)
+  console.log(`3: ${n[3]}, 4: ${n[4]}, 5: ${n[5]}`);
+  credits.credits = money;
+  console.log(credits.credits);
+  client.credits.set(author, credits);
 }
 }
 
