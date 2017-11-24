@@ -10,22 +10,18 @@ exports.run = async (client, message, args) => {
   else{
     amount = 1;
   }
-  //console.log("amount = "+amount);
- // console.log(credits.credits < amount);
   if(money < amount){
      message.channel.send(`You don't have ${amount} credits`); return;
     }
      else{
        money -= amount;
-       console.log (`${money}   ${amount}`);
   var jackpot = amount * 25;
   var triple7s = amount * 15;
   var double7s = amount * 9;
-  var single7 = amount * 3;
+  var single7 = amount * 2;
   var secondPrize = amount * 4;
-  var lastPrize = amount * 3;
-  //console.log(`jackpot = ${jackpot} \n firstprize = ${firstPrize} \n second Prize = ${secondPrize} \n last Prize = ${lastPrize}`);
-
+  var lastPrize = amount * 2;
+  
   const slotsObj = {
     "slots":{
       0:":flag_lv:",
@@ -38,10 +34,9 @@ exports.run = async (client, message, args) => {
       7:":gem:"
     }
   }
-  //console.log(JSON.stringify(slotsObj));
- // console.log(slotsObj["slots"])
+
   const msg = await message.channel.send(`**Slot [:slot_machine:] Machine**\n`);
- // console.log(`message sent = ${msg}`);
+
   var n = new Array();
   var l = new Array();
   var weight = [0, 1, 1, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7];
@@ -54,7 +49,7 @@ exports.run = async (client, message, args) => {
         if(n[e] == prop) l[e] = slotsProps[prop];
       }
       if((e+1)%3 == 0){
-       // console.log((e+1)%3 + " " + l[e] + " " + e);
+
         output += l[e];
         output += `\n`;
       }
@@ -66,7 +61,7 @@ exports.run = async (client, message, args) => {
     } 
     await msg.edit(`**Slot [:slot_machine:] Machine**\n ${output}`);
     output = "";
-   // console.log(`message editted`)
+
   }
   if(l[3] == l[4] && l[3] == l[5]){
     const msg = await message.channel.send("You Win!!!")
@@ -100,12 +95,11 @@ exports.run = async (client, message, args) => {
   }
   else{
     message.channel.send(`**${message.author.username}** You lost :(`);
-    //   points[message.author.id] -= 1;
+
   }
-  console.log(`3: ${l[3]}, 4: ${l[4]}, 5: ${l[5]}`);
-  console.log(`3: ${n[3]}, 4: ${n[4]}, 5: ${n[5]}`);
+
   credits.credits = money;
-  console.log(credits.credits);
+
   client.credits.set(author, credits);
 }
 }
