@@ -12,7 +12,7 @@ If you want to self-host the bot here is the quick guide on how to.
 
 Step 1:
 --------
-Download this directory to a server by using git clone git@github.com:blogboywill/Yui.git.
+Download this directory to a server by using `git clone git@github.com:blogboywill/Yui.git`.
 
 Step 2:
 -------
@@ -33,4 +33,4 @@ Step 5:
 If you are using a linux server (and why wouldn't you)
 run `sudo apt get forever` to install forever.
 then run `forever start bot.js` to run bot.js forever.
-=======
+
