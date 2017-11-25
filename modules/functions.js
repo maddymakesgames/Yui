@@ -55,6 +55,7 @@ module.exports = (client) => {
 
 
   client.pointsMonitor = (client, message) => {
+    //require('./lvlUp.js');
     const guild = message.guild.id;
     const author = message.author.id;
     const settings = client.settings.get(guild);
@@ -68,7 +69,7 @@ module.exports = (client) => {
     score.points++;
     const curLevel = Math.floor(0.1 * Math.sqrt(score.points)) + 1;
     if (score.level < curLevel) {
-      message.reply(`You've leveled up to level **${curLevel}**! Ain't that dandy?`);
+      client.lvlUp(client, message, curLevel);
       score.level = curLevel;
       credits.credits++;
       console.log(credits);
@@ -120,7 +121,7 @@ module.exports = (client) => {
 
   client.loadCommand = (commandName) => {
     try {
-      const props = require(`../commands/${commandName}`);
+      const props = require(`../${commandName}`);
       client.log("log", `Loading Command: ${props.help.name}`);
       if (props.init) {
         props.init(client);
@@ -136,19 +137,38 @@ module.exports = (client) => {
   };
 
   client.unloadCommand = async (commandName) => {
-    let command;
+    var commandIndex;
     if (client.commands.has(commandName)) {
+      var i = 0;
+      console.log(`commands has commandName`);
+      console.log(client.aliases.keyArray());
+      commandIndex = client.commands.keyArray().indexOf(commandName);
       command = client.commands.get(commandName);
     } else if (client.aliases.has(commandName)) {
-      command = client.commands.get(client.aliases.get(commandName));
+      commandIndex = client.commands.Array().indexOf(commandName);
+      for(var prop in client.commands){
+        var i = 0;
+        if(prop.aliases.get(commandName)){
+          commandIndex = i;
+        }
+        else{
+          i++;
+        }
+     // command = client.commands.indexOf(client.aliases.get(commandName));
     }
-    if (!command) return `The command \`${commandName}\` doesn't seem to exist, nor is it an alias. Try again!`;
+  }
+  console.log(commandIndex);
+    if (!commandIndex) return `The command \`${commandName}\` doesn't seem to exist, nor is it an alias. Try again!`;
 
     if (command.shutdown) {
       await command.shutdown(client);
     }
-    delete require.cache[require.resolve(`../commands/${commandName}.js`)];
-    return false;
+    // console.log(client.commands)
+    // console.log(commandIndex); 
+    // console.log(client.cmdFiles);
+    console.log(client.cmdFiles[commandIndex]);
+    delete require.cache[require.resolve(`../${client.cmdFiles[commandIndex]}`)];
+    return false, client.cmdFiles[commandIndex];
   };
 
   /* MISCELANEOUS NON-CRITICAL FUNCTIONS */
