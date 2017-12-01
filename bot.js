@@ -24,6 +24,7 @@ client.config = require("./config.js");
 // Let's start by getting some useful functions that we'll use throughout
 // the bot, like logs and elevation features.
 require("./modules/functions.js")(client);
+require("./modules/photoFunctions.js")(client);
 
 // Aliases and commands are put in collections where they can be read from,
 // catalogued, listed, etc.
@@ -40,14 +41,38 @@ const serverScoresProvider = new EnmapLevel({name:"serverPoints"});
 client.points = new Enmap({provider: pointsProvider});
 client.serverPoints= new Enmap({provieder: serverScoresProvider});
 client.credits = new Enmap({provider: new EnmapLevel({name: "credits"})});
+client.userProfiles = new Enmap({provider: new EnmapLevel({name: "userProfiles"})});
 // We're doing real fancy node 8 async/await stuff here, and to do that
 // we need to wrap stuff in an anonymous function. It's annoying but it works.
+
+  var walkSync = function(dir, filelist) {
+    var path = path || require('path');
+    var fs = fs || require('fs'),
+        files = fs.readdirSync(dir);
+    filelist = filelist || [];
+    files.forEach(function(file) {
+      if (fs.statSync(path.join(dir, file)).isDirectory()) {
+        filelist = walkSync(path.join(dir, file), filelist);
+      }
+      else {
+        // console.log(file);
+        // console.log(filelist);
+        // console.log(dir);
+        //console.log(path.join("/"+dir,file));
+        filelist.push(path.join(dir, file));
+      }
+    });
+    return filelist;
+  };
 
 const init = async () => {
 
   // Here we load **commands** into memory, as a collection, so they're accessible
   // here and everywhere else.
-  const cmdFiles = await readdir("./commands/");
+  var cmdFiles = [];
+  cmdFiles = walkSync("./commands/", cmdFiles);
+  client.cmdFiles = cmdFiles;
+  //console.log(cmdFiles);
   client.log("log", `Loading a total of ${cmdFiles.length} commands.`);
   cmdFiles.forEach(f => {
     if (!f.endsWith(".js")) return;
@@ -80,3 +105,4 @@ const init = async () => {
 };
 
 init();
+

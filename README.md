@@ -7,11 +7,12 @@ To use the offical version of the bot hosted by Willikesgames use this URL:
 https://discordapp.com/oauth2/authorize?client_id=367151168863993856&scope=bot&permissions=335019080
 
 Installation:
+------------
 If you want to self-host the bot here is the quick guide on how to.
 
 Step 1:
 --------
-Download this directory to a server.
+Download this directory to a server by using `git clone git@github.com:blogboywill/Yui.git`.
 
 Step 2:
 -------

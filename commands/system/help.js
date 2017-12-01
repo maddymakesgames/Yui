@@ -13,7 +13,7 @@ exports.run = (client, message, args, level) => {
     const settings = message.guild ? client.settings.get(message.guild.id) : client.config.defaultSettings;
 
     // Filter all commands by which are available for the user's level, using the <Collection>.filter() method.
-    const myCommands = message.guild ? client.commands.filter(cmd => client.levelCache[cmd.conf.permLevel] <= level) : client.commands.filter(cmd => client.levelCache[cmd.conf.permLevel] <= level &&  cmd.conf.guildOnly !== true);
+    const myCommands = message.guild ? client.commands.filter(cmd => client.levelCache[cmd.conf.permLevel] <= level) : client.commands.filter(cmd => client.levelCache[cmd.conf.permLevel] <= level && cmd.conf.guildOnly !== true);
 
     // Here we have to get the command names only, and we use that array to get the longest name.
     // This make the help commands "aligned" in the output.
@@ -25,22 +25,22 @@ exports.run = (client, message, args, level) => {
     var catCount = new Array();
     let currentCategory = "";
     let output = `\`\`\`js\nCommand List\`\`\``;
-    const sorted = myCommands.array().sort((p, c) => p.help.category > c.help.category ? 1 :  p.help.name > c.help.name && p.help.category === c.help.category ? 1 : -1 );
-    
-  
-    sorted.forEach( c => {
+    const sorted = myCommands.array().sort((p, c) => p.help.category > c.help.category ? 1 : p.help.name > c.help.name && p.help.category === c.help.category ? 1 : -1);
+
+
+    sorted.forEach(c => {
       const cat = c.help.category.toProperCase();
-      if(currentCategory !== cat){
+      if (currentCategory !== cat) {
         currentCategory = cat;
         i++;
         catCount[i] = 0;
       }
-      catCount[i] ++;
+      catCount[i]++;
     })
-    
+
     currentCategory = "";
     i = 0;
-    sorted.forEach( c => {
+    sorted.forEach(c => {
       const cat = c.help.category.toProperCase();
       if (currentCategory !== cat) {
         output += `**${cat}**:\n`;
@@ -48,13 +48,12 @@ exports.run = (client, message, args, level) => {
         e = 1;
         i++;
       }
-      if(e != catCount[i]){
-      output += `\`${settings.prefix[0]}${c.help.name}\`, `;
-      }
-      else{
+      if (e != catCount[i]) {
+        output += `\`${settings.prefix[0]}${c.help.name}\`, `;
+      } else {
         output += `\`${settings.prefix[0]}${c.help.name}\`\n`
       }
-      
+
       e++
     });
     output += `\`\`\`[Use ${settings.prefix[0]}help <commandname> for details]\`\`\``
@@ -65,7 +64,9 @@ exports.run = (client, message, args, level) => {
     if (client.commands.has(command)) {
       command = client.commands.get(command);
       if (level < client.levelCache[command.conf.permLevel]) return;
-      message.channel.send(`${command.help.name} \nDescription: ${command.help.description}\nUsage: ${command.help.usage}`, {code:"asciidoc"});
+      message.channel.send(`${command.help.name} \nDescription: ${command.help.description}\nUsage: ${command.help.usage}`, {
+        code: "asciidoc"
+      });
     }
   }
 };
@@ -79,7 +80,7 @@ exports.conf = {
 
 exports.help = {
   name: "help",
-  category: "General",
+  category: "System",
   description: "Displays all the available commands for your permission level.",
   usage: `help, help [command]`
 };

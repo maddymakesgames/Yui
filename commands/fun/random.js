@@ -17,7 +17,6 @@ exports.run = async (client, message, args) => {
     count++;
   }
   rand13 = Math.floor(Math.random() * count)+1
-//  message.channel.send(count);
   for(var prop in randobj) {
       if(prop == rand13){
     message.channel.send(randobj[prop]);
