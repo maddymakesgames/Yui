@@ -4,3 +4,4 @@ config.js
 data/
 node_modules
 yui.code-workspace
+assets/images/bot-icon.png
