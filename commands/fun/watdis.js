@@ -1,7 +1,6 @@
 const jimp = require(`jimp`);
 exports.run = async (client, message, args) => {
 	var URL = message.author.avatarURL;
-	//console.log(avatar);
 	jimp.read(`./photos/peridot.jpg`, function (err, image) {
 			jimp.read(URL, function (err, image1) {
 				jimp.loadFont(jimp.FONT_SANS_64_WHITE).then(function (font) {

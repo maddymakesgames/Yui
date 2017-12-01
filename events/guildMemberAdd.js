@@ -1,6 +1,7 @@
 // This event executes when a new member joins a server. Let's welcome them!
 
 module.exports = (client, member) => {
+  config = require('./config.js');
   // Load the guild's settings
   const settings = client.settings.get(member.guild.id);
 
@@ -20,4 +21,9 @@ module.exports = (client, member) => {
   dmWelcomeMessage = dmWelcomeMessage.replace("{{server}}", member.guild.name);
 
   member.send(dmWelcomeMessage);
+
+  let profile = client.userProfiles.get(member.id);
+  if(!(profile) || profile == undefined){
+  client.userProfiles.set(member.id, config.defaultProfile);
+  }
 };

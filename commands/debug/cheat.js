@@ -29,7 +29,7 @@ if(args[0] == "set"){
     }
     else if(args[0] == "give"){
         if(args[1] == "credits"){
-            credits.credits += amount; // = {credits:parseInt(amount)};
+            credits.credits += amount;
             client.credits.set(message.author.id, credits);
             message.channel.send(`You now have ${args[2]} credits. Want proof? Here: ${JSON.stringify(credits)}`);
             console.log(credits);

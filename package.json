@@ -4,10 +4,11 @@
   "description": "A discord.js bot",
   "main": "bot.js",
   "dependencies": {
+    "canvas": "^1.6.7",
+    "canvas-constructor": "^0.3.0",
     "discord.js": "^11.2.1",
     "enmap": "^0.4.2",
     "enmap-level": "^1.0.0",
-
     "jimp": "^0.2.28",
     "random-js": "^1.0.8",
     "snekfetch": "^3.5.8"

@@ -24,7 +24,7 @@ client.config = require("./config.js");
 // Let's start by getting some useful functions that we'll use throughout
 // the bot, like logs and elevation features.
 require("./modules/functions.js")(client);
-require("./modules/lvlUp.js")(client);
+require("./modules/photoFunctions.js")(client);
 
 // Aliases and commands are put in collections where they can be read from,
 // catalogued, listed, etc.
@@ -41,6 +41,7 @@ const serverScoresProvider = new EnmapLevel({name:"serverPoints"});
 client.points = new Enmap({provider: pointsProvider});
 client.serverPoints= new Enmap({provieder: serverScoresProvider});
 client.credits = new Enmap({provider: new EnmapLevel({name: "credits"})});
+client.userProfiles = new Enmap({provider: new EnmapLevel({name: "userProfiles"})});
 // We're doing real fancy node 8 async/await stuff here, and to do that
 // we need to wrap stuff in an anonymous function. It's annoying but it works.
 

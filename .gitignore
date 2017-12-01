@@ -3,3 +3,4 @@ yarn-error.log*
 config.js
 data/
 node_modules
+yui.code-workspace

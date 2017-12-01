@@ -55,7 +55,6 @@ module.exports = (client) => {
 
 
   client.pointsMonitor = (client, message) => {
-    //require('./lvlUp.js');
     const guild = message.guild.id;
     const author = message.author.id;
     const settings = client.settings.get(guild);
@@ -163,9 +162,6 @@ module.exports = (client) => {
     if (command.shutdown) {
       await command.shutdown(client);
     }
-    // console.log(client.commands)
-    // console.log(commandIndex); 
-    // console.log(client.cmdFiles);
     console.log(client.cmdFiles[commandIndex]);
     delete require.cache[require.resolve(`../${client.cmdFiles[commandIndex]}`)];
     return false, client.cmdFiles[commandIndex];
@@ -193,6 +189,24 @@ module.exports = (client) => {
 
   // `await client.wait(1000);` to "pause" for 1 second.
   client.wait = require("util").promisify(setTimeout);
+
+  client.isUser = (string) => {
+    console.log(`isUser has run`)
+    for(i = 0; i < client.guilds.array().length; i++){
+      var server = client.guilds.array()[i];
+       console.log(server.name)
+      for(var e= 0; e < server.members.array().length; e++){
+        var member = server.members.array()[e]
+        console.log(member.user.username);
+        console.log(member.displayName);
+        console.log(string);
+        if(string == member.user.username || string == member.displayName){
+          return member.user;
+        }
+      }
+    }
+    return false;
+  } 
 
   // These 2 process methods will catch exceptions and give *more details* about the error and stack trace.
   process.on("uncaughtException", (err) => {

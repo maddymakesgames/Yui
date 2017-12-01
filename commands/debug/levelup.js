@@ -1,5 +1,4 @@
 exports.run = async (client,message,args) => {
-	//require(`../modules/lvlUp`);
 	var lvl = parseInt(args[0]);
 	client.lvlUp(client, message, lvl);
 }
