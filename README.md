@@ -31,6 +31,6 @@ Step 5:
 -------
 `run node bot.js` to run the bot.
 If you are using a linux server (and why wouldn't you)
-run `sudo apt get forever` to install forever.
+run `npm i -g forever` to install forever.
 then run `forever start bot.js` to run bot.js forever.
 
