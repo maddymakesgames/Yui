@@ -29,8 +29,7 @@ Create a file called config.js based off of the ExampleConfig.js with your user 
 
 Step 5:
 -------
-`run node bot.js` to run the bot.
-If you are using a linux server (and why wouldn't you)
-run `sudo apt get forever` to install forever.
-then run `forever start bot.js` to run bot.js forever.
-
+`run node yui.js` to run the bot.
+If you are using a linux server (and why wouldn't you) install forever
+for Ubuntu run `sudo apt get forever` to install forever.
+then run `forever start yui.js` to run bot.js forever.

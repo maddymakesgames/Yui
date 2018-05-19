@@ -1,7 +1,12 @@
 yarn-debug.log*
 yarn-error.log*
-config.js
 data/
 node_modules
 yui.code-workspace
 assets/images/bot-icon.png
+old_data/
+.eslintrc
+config.hjson
+.eslintrc.json
+assets/images/yui.vox
+log.log

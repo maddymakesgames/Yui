@@ -1,29 +1,30 @@
 // This event executes when a new member joins a server. Let's welcome them!
 
 module.exports = (client, member) => {
-  config = require('./config.js');
-  // Load the guild's settings
-  const settings = client.settings.get(member.guild.id);
+	const config = client.config;
+	// Load the guild's settings
+	const settings = client.settings.get(member.guild.id);
 
-  // If welcome is off, don't proceed (don't welcome the user)
-  if (settings.welcomeEnabled !== true) return;
+	const profile = client.userProfiles.get(member.id);
+	if (!(profile) || profile == undefined) {
+		client.userProfiles.set(member.id, config.defaultProfile);
+	}
 
-  // Replace the placeholders in the welcome message with actual data
-  const welcomeMessage = settings.welcomeMessage.replace("{{user}}", member.user.tag);
+	// If welcome is off, don't proceed (don't welcome the user)
+	if (settings.welcomeEnabled !== true) return;
 
-  // Send the welcome message to the welcome channel
-  // There's a place for more configs here.
-  member.guild.channels.find("name", settings.welcomeChannel).send(welcomeMessage).catch(console.error);
+	// Replace the placeholders in the welcome message with actual data
+	let welcomeMessage = settings.welcomeMessage.replace('{{user}}', member.user.tag);
+	welcomeMessage = welcomeMessage.replace('{{server}}', member.guild.name);
 
-  if(settings.dmWelcomeEnabled != true) return;
+	// Send the welcome message to the welcome channel
+	// There's a place for more configs here.
+	const channel = member.guild.channels.find(channle => channle.name === settings.welcomeChannel);
+	if(channel) channel.send(welcomeMessage).catch(console.error);
 
-  const dmWelcomeMessage = settings.dmWelcomeMessage.replace("{{user}}", member.user);
-  dmWelcomeMessage = dmWelcomeMessage.replace("{{server}}", member.guild.name);
-
-  member.send(dmWelcomeMessage);
-
-  let profile = client.userProfiles.get(member.id);
-  if(!(profile) || profile == undefined){
-  client.userProfiles.set(member.id, config.defaultProfile);
-  }
+	if(settings.dmWelcomeEnabled == true) {
+		let dmWelcomeMessage = settings.dmWelcomeMessage.replace('{{user}}', member.user);
+		dmWelcomeMessage = dmWelcomeMessage.replace('{{server}}', member.guild.name);
+		member.send(dmWelcomeMessage);
+	}
 };

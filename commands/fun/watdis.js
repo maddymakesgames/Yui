@@ -1,29 +1,22 @@
-const jimp = require(`jimp`);
 exports.run = async (client, message, args) => {
-	var URL = message.author.avatarURL;
-	jimp.read(`./photos/peridot.jpg`, function (err, image) {
-			jimp.read(URL, function (err, image1) {
-				jimp.loadFont(jimp.FONT_SANS_64_WHITE).then(function (font) {
-					image.composite(image1.resize(150,150), 345,100)
-					image.print(font, 100, 40, "Wat Dis?")
-					.getBuffer(jimp.AUTO, function (err, buffer) {
-						message.channel.send("", {files:[{attachment: buffer}]});
-				});	
-			});	
-		});
-	});
-}
+	let user;
+	if(!args[0]) user = message.author;
+	else if(message.mentions.users.array.length > 0) user = message.mentions.users.first();
+	else if(client.isUser(args.join(' '))) user = client.isUser(args.join(' '));
+	else return message.channel.send(`${message.member.nickname || message.author.username}, ${args[0]} is not a user. Please supply a user.`);
+	await client.watDis(message, user);
+};
 
 exports.conf = {
 	enabled: true,
 	guildOnly: false,
-	aliases: [`pointing`],
-	permLevel: "User"
-  };
-  
-  exports.help = {
+	aliases: ['pointing'],
+	permLevel: 'User',
+};
+
+exports.help = {
 	name: 'watdis',
-	category: "Fun",
-	description: 'Sends the use\'s avatar on a meme.',
-	usage: 'pointing'
-  };
+	category: 'Fun',
+	description: 'Wat dis?',
+	usage: 'pointing',
+};

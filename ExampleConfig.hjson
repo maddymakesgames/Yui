@@ -1,0 +1,45 @@
+{
+  # Your user ID. (will have full perms in every server you join with the bot).
+  ownerID: "User ID Here"
+  # Contributors to the bot (will have near owner perms in any server they join with the bot).
+  contributors: []
+  # Bot Admins (will have admin perms in every server they join with the bot).
+  admins: []
+  # Bot support team (will have support perms in every server they join).
+  support: []
+  # Your Bot Token DO NOT TELL ANYONE THIS!
+  token: ecE3fe_ef3WAsafeToken_34
+
+  # The default profile info for a user.
+  defaultProfile:
+  {
+    tagline: Insert Witty Quote Here
+    description: A person is me
+  }
+  # The Default Settings for every guild.
+  defaultSettings:
+  {
+    prefix:
+    [
+      y!
+      Y!
+    ]
+    modLogChannel: mod-log
+    modRole: Moderator
+    adminRole: Administrator
+    systemNotice: true
+    GeneralChannel: general
+    AnnouncementsChannel: announcements
+    BotAnnouncementsEnabled: true
+    welcomeChannel: welcome
+    # The server welcome message (use {{user}} or {{server}} to get the username or server name respectivly)
+    welcomeMessage: Say hello to {{user}}!
+    welcomeEnabled: true
+    dmWelcomeEnabled: false
+    # The server dm welcome message (use {{user}} or {{server}} to get the username or server name respectivly)
+    dmWelcomeMessage: Welcome {{user}} to {{server}}!
+    # KEEP THIS AS FALSE ALWAYS!
+    debug: false
+    lvlUpMessage: true
+  }
+}

@@ -1,25 +1,20 @@
 const snekfetch = require('snekfetch');
-const jimp = require(`jimp`);
 
 exports.run = async (client, message, args) => {
-	var URL = message.author.avatarURL;
-	jimp.read(URL, function (err, image) {
-		image.getBuffer(jimp.AUTO, function (err, mime) {
-			message.channel.send("", {files:[{attachment: mime}]});
-		});
-	});
-}
+	const URL = (client.isUser(args) || message.mentions.users.first() || message.author).displayAvatarURL;
+	snekfetch.get(URL).then((data) => message.channel.send('', { files:[{ attachment: data.body }] }), (err) => console.error(err));
+};
 
 exports.conf = {
 	enabled: true,
 	guildOnly: false,
 	aliases: [],
-	permLevel: "User"
-  };
-  
-  exports.help = {
+	permLevel: 'User',
+};
+
+exports.help = {
 	name: 'avatar',
-	category: "Fun",
+	category: 'Fun',
 	description: 'Sends the use\'s avatar.',
-	usage: 'avatar'
-  };
+	usage: 'avatar',
+};

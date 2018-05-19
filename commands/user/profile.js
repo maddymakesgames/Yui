@@ -1,32 +1,33 @@
-exports.run = async(client, message, args) => {
-	var user = client.isUser(args[0]) || message.author; 
-	var displayName = user.nickname || user.username;
+exports.run = async (client, message, args) => {
+	let user = client.isUser(args[0]) || message.author;
+	const displayName = user.nickname || user.username;
 	if (args.length <= 0) {
 		user = message.author;
 		message.channel.send(user.toString());
-		await client.displayProfile(client, message, user);
+		await client.displayProfile(message, user);
 		return;
-	}else{
 	}
-	
+
+
 	if (user != false) {
 		message.channel.send(`Showing the profile for ${displayName}.`);
-		await client.displayProfile(client, message, user);
-	} else {
+		await client.displayProfile(message, user);
+	}
+	else {
 		message.channel.send(`${message.author} please input a valid username or nickname.`);
 	}
-}
+};
 
 exports.conf = {
 	enabled: true,
 	guildOnly: false,
 	aliases: [],
-	permLevel: "User"
-}
+	permLevel: 'Contributor',
+};
 
 exports.help = {
-	name: "profile",
-	category: "User",
+	name: 'profile',
+	category: 'User',
 	description: 'Sends the use\'s profile.',
-	usage: 'proflie or profile <username or nickname>'
-}
+	usage: 'proflie or profile <username or nickname>',
+};
